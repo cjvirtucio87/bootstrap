@@ -20,12 +20,19 @@ install() {
 
   if [ -f "${CONFIG_PATH}/staging_dir" ]; then
     staging_dir="$(cat $CONFIG_PATH/staging_dir)";
+    log_debug "${CONFIG_PATH}/staging_dir file already exists; skipping creation";
   else
     staging_dir=$(mktemp -d);
     log_debug "created staging directory ${staging_dir}";
 
     echo "${staging_dir}" > "${CONFIG_PATH}/staging_dir";
     log_debug "created staging_dir file with staging_dir, ${staging_dir}";
+  fi
+
+  if [ -d "${staging_dir}/git/dotfiles" ]; then
+    log_debug "${CONFIG_PATH}/git/dotfiles already exists; skipping cloning";
+  else 
+    git clone "${DOTFILES_URL}" "${staging_dir}/git/dotfiles";
   fi
 }
 
