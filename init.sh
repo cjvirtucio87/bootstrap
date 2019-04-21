@@ -13,6 +13,11 @@ install() {
 
     mkdir "${CONFIG_PATH}";
   fi
+
+  local staging_dir=$(mktemp -d --tmpdir=$CONFIG_PATH);
+  if [ $(echo $LOG_LEVEL | awk '{print tolower($0)}') == "debug" ]; then
+    echo "creating staging directory ${staging_dir}";
+  fi
 }
 
 main() {
