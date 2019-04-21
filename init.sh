@@ -18,12 +18,15 @@ install() {
     mkdir "${CONFIG_PATH}";
   fi
 
-  local staging_dir=$(mktemp -d);
-  log_debug "created staging directory ${staging_dir}";
+  if [ -f "${CONFIG_PATH}/staging_dir" ]; then
+    staging_dir="$(cat $CONFIG_PATH/staging_dir)";
+  else
+    staging_dir=$(mktemp -d);
+    log_debug "created staging directory ${staging_dir}";
 
-  echo "${staging_dir}" > "${CONFIG_PATH}/staging_dir";
-
-  log_debug "created staging_dir file with staging_dir, ${staging_dir}";
+    echo "${staging_dir}" > "${CONFIG_PATH}/staging_dir";
+    log_debug "created staging_dir file with staging_dir, ${staging_dir}";
+  fi
 }
 
 main() {
