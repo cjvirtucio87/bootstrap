@@ -23,7 +23,7 @@ install() {
 
   echo "${staging_dir}" > "${CONFIG_PATH}/staging_dir";
 
-  log_debug "creating staging_dir file with staging_dir, ${staging_dir}";
+  log_debug "created staging_dir file with staging_dir, ${staging_dir}";
 }
 
 main() {
