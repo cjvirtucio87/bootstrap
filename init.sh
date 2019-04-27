@@ -1,8 +1,8 @@
 #!/bin/bash
 
 CONFIG_PATH="${HOME}/.bootstrap";
-LOG_LEVEL="${LOG_LEVEL:-INFO}";
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
+LOG_LEVEL="${LOG_LEVEL:-INFO}";
 
 
 log_debug() {
