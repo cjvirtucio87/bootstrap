@@ -2,13 +2,22 @@
 
 CONFIG_PATH="${HOME}/.bootstrap";
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
+DOTFILES_PLATFORM='ubuntu';
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
+MNT_USER_PATH="/mnt/c/Users/cjv28";
 
 
 log_debug() {
   if [ $(echo $LOG_LEVEL | awk '{print tolower($0)}') == "debug" ]; then
     echo "${1}";
   fi
+}
+
+deploy_dotfiles() {
+  local src_dir=$1;
+  local dest_dir=$2;  
+
+  rsync -av $src_dir/.[^.]* "${dest_dir}";
 }
 
 install() {
@@ -34,6 +43,12 @@ install() {
   else 
     git clone "${DOTFILES_URL}" "${staging_dir}/git/dotfiles";
   fi
+
+  local src_dir="${staging_dir}/git/dotfiles/${DOTFILES_PLATFORM}";
+
+  log_debug "deploying dotfiles from ${src_dir} to ${MNT_USER_PATH}";
+
+  deploy_dotfiles "${src_dir}" "${MNT_USER_PATH}";
 }
 
 main() {
