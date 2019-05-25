@@ -20,7 +20,7 @@ symlink_to_src() {
   find $src_dir \
     -maxdepth 1 \
     -mindepth 1 \
-    -name .[^.]* \
+    -name '.*' \
     -exec bash -c "symlink_name=\"${dest_dir}/\$(basename {})\"; if [ ! -L \"\${symlink_name}\" ]; then ln -s {} \"\${symlink_name}\"; fi" \;
 }
 
