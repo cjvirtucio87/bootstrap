@@ -13,6 +13,17 @@ log_debug() {
   fi
 }
 
+symlink_to_src() {
+  local src_dir=$1;
+  local dest_dir=$2;
+
+  find $src_dir \
+    -maxdepth 1 \
+    -mindepth 1 \
+    -name .[^.]* \
+    -exec bash -c "symlink_name=\"${dest_dir}/\$(basename {})\"; if [ ! -L \"\${symlink_name}\" ]; then ln -s {} \"\${symlink_name}\"; fi" \;
+}
+
 deploy_dotfiles() {
   local src_dir=$1;
   local dest_dir=$2;  
@@ -49,6 +60,10 @@ install() {
   log_debug "deploying dotfiles from ${src_dir} to ${MNT_USER_PATH}";
 
   deploy_dotfiles "${src_dir}" "${MNT_USER_PATH}";
+
+  log_debug "creating symlinks in ${HOME} to dotfiles in ${MNT_USER_PATH}";
+
+  symlink_to_src "${MNT_USER_PATH}" "${HOME}";
 }
 
 main() {
