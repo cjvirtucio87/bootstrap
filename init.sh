@@ -32,6 +32,31 @@ deploy_dotfiles() {
 }
 
 install() {
+  local clean_post
+  local clean_pre
+
+  while (( "$#" )); do
+    case "$1" in
+      '-d' | '--clean-post')
+        clean_post=1;
+        shift;
+        ;;
+      '-c' | '--clean-pre')
+        clean_pre=1;
+        shift;
+        ;;
+      *)
+    esac
+  done
+
+  if [[ -n "${clean_post}" ]]; then
+    echo 'clean post flag is active';
+  fi
+
+  if [[ -n "${clean_pre}" ]]; then
+    echo 'clean pre flag is active';
+  fi
+
   if [ ! -d "${CONFIG_PATH}" ]; then
     log_debug "initializing config folder at ${CONFIG_PATH}";
 
@@ -69,10 +94,11 @@ install() {
 
 main() {
   local subcommand=$1;
+  shift
 
   case "${subcommand}" in
     'install')
-      install;
+      install "$@";
       ;;
     *)
       echo "unsupported subcommand ${subcommand}";
