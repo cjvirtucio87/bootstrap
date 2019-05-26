@@ -4,7 +4,7 @@ CONFIG_PATH="${HOME}/.bootstrap";
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
 DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
-MNT_USER_PATH="${MNT_USER_PATH:-/mnt/c/Users/cjv28}";
+DOTFILES_DEPLOY_DIR="${DOTFILES_DEPLOY_DIR:-/mnt/c/Users/cjv28}";
 
 read -r -d '' INSTALL_USAGE <<'EOF'
 INSTALL
@@ -13,7 +13,7 @@ Subcommand for installing your dotfiles.
 
 [description]
 Install your dotfiles by cloning them from $DOTFILES_URL, copying the files in the $DOTFILES_PLATFORM of 
-your project, and deploying them to $MNT_USER_PATH.
+your project, and deploying them to $DOTFILES_DEPLOY_DIR.
 
 [usage]
 - View this help message:
@@ -98,8 +98,8 @@ install() {
     exit 1;
   fi
 
-  if [ ! -d "${MNT_USER_PATH}" ]; then
-    log_error "MNT_USER_PATH, ${MNT_USER_PATH}, does not exist";
+  if [ ! -d "${DOTFILES_DEPLOY_DIR}" ]; then
+    log_error "DOTFILES_DEPLOY_DIR, ${DOTFILES_DEPLOY_DIR}, does not exist";
     exit 1;
   fi
 
@@ -156,13 +156,13 @@ install() {
 
   local src_dir="${staging_dir}/git/dotfiles/${DOTFILES_PLATFORM}";
 
-  log_debug "deploying dotfiles from ${src_dir} to ${MNT_USER_PATH}";
+  log_debug "deploying dotfiles from ${src_dir} to ${DOTFILES_DEPLOY_DIR}";
 
-  deploy_dotfiles "${src_dir}" "${MNT_USER_PATH}";
+  deploy_dotfiles "${src_dir}" "${DOTFILES_DEPLOY_DIR}";
 
-  log_debug "creating symlinks in ${HOME} to dotfiles in ${MNT_USER_PATH}";
+  log_debug "creating symlinks in ${HOME} to dotfiles in ${DOTFILES_DEPLOY_DIR}";
 
-  symlink_to_src "${MNT_USER_PATH}" "${HOME}";
+  symlink_to_src "${DOTFILES_DEPLOY_DIR}" "${HOME}";
 
   if [ -n "${clean_post}" ]; then
     log_debug "cleaning after install";
