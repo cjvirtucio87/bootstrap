@@ -2,9 +2,9 @@
 
 CONFIG_PATH="${HOME}/.bootstrap";
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
-DOTFILES_PLATFORM='ubuntu';
+DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
-MNT_USER_PATH="/mnt/c/Users/cjv28";
+MNT_USER_PATH="${MNT_USER_PATH:-/mnt/c/Users/cjv28}";
 
 
 log_debug() {
