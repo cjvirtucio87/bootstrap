@@ -38,6 +38,7 @@ install() {
     mkdir "${CONFIG_PATH}";
   fi
 
+  local staging_dir
   if [ -f "${CONFIG_PATH}/staging_dir" ]; then
     staging_dir="$(cat $CONFIG_PATH/staging_dir)";
     log_debug "${CONFIG_PATH}/staging_dir file already exists; skipping creation";
