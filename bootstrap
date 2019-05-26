@@ -13,7 +13,8 @@ Subcommand for installing your dotfiles.
 
 [description]
 Install your dotfiles by cloning them from $DOTFILES_URL, copying the files in the $DOTFILES_PLATFORM of 
-your project, and deploying them to $DOTFILES_DEPLOY_DIR.
+your project, and deploying them to $DOTFILES_DEPLOY_DIR. Then, create symbolic links in your $HOME directory
+pointing to the files in your $DOTFILES_DEPLOY_DIR.
 
 [usage]
 - View this help message:
