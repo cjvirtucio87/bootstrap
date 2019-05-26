@@ -6,6 +6,28 @@ DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
 MNT_USER_PATH="${MNT_USER_PATH:-/mnt/c/Users/cjv28}";
 
+read -r -d '' INSTALL_USAGE <<'EOF'
+INSTALL
+[summary]
+Subcommand for installing your dotfiles.
+
+[description]
+Install your dotfiles by cloning them from $DOTFILES_URL, copying the files in the $DOTFILES_PLATFORM of 
+your project, and deploying them to $MNT_USER_PATH.
+
+[usage]
+- View this help message:
+bootstrap install -h
+
+- Clean up the $HOME/.bootstrap folder before executing:
+bootstrap install -c
+
+- Clean up the $HOME/.bootstrap folder after executing:
+bootstrap install -d
+
+- Execute with a log level of DEBUG:
+LOG_LEVEL=debug bootstrap install
+EOF
 
 log_debug() {
   if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(debug|error)$ ]]; then
@@ -93,6 +115,10 @@ install() {
       '-c' | '--clean-pre')
         clean_pre=1;
         shift;
+        ;;
+      '-h' | '--help')
+        echo "${INSTALL_USAGE}";
+        exit 0;
         ;;
       *)
     esac
