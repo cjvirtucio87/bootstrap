@@ -8,8 +8,20 @@ MNT_USER_PATH="${MNT_USER_PATH:-/mnt/c/Users/cjv28}";
 
 
 log_debug() {
-  if [ $(echo $LOG_LEVEL | awk '{print tolower($0)}') == "debug" ]; then
-    echo "${1}";
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(debug|error)$ ]]; then
+    echo "[DEBUG] ${1}";
+  fi
+}
+
+log_error() {
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|debug|error)$ ]]; then
+    echo "[ERROR] ${1}";
+  fi
+}
+
+log_warn() {
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|warn|debug|error)$ ]]; then
+    echo "[WARN] ${1}";
   fi
 }
 
@@ -32,6 +44,18 @@ deploy_dotfiles() {
 }
 
 install() {
+  log_debug "validating required variables";
+
+  if [ ! -d "${HOME}" ]; then
+    log-error "HOME, ${HOME}, does not exist";
+    exit 1;
+  fi
+
+  if [ ! -d "${MNT_USER_PATH}" ]; then
+    log_error "MNT_USER_PATH, ${MNT_USER_PATH}, does not exist";
+    exit 1;
+  fi
+
   local clean_post
   local clean_pre
 
@@ -49,12 +73,31 @@ install() {
     esac
   done
 
-  if [[ -n "${clean_post}" ]]; then
-    echo 'clean post flag is active';
-  fi
+  local staging_dir
 
-  if [[ -n "${clean_pre}" ]]; then
-    echo 'clean pre flag is active';
+  if [ -n "${clean_pre}" ]; then
+    if [ -d "${CONFIG_PATH}" ]; then
+      log_debug "cleaning prior to install";
+
+      if [ -f "${CONFIG_PATH}/staging_dir" ]; then
+        staging_dir="$(cat $CONFIG_PATH/staging_dir)";
+
+        if [ -d "${staging_dir}" ]; then
+          log_debug "cleaning staging_dir, ${staging_dir}";
+
+          rm -rf "${staging_dir}";
+        else
+          log_warn "staging_dir, ${staging_dir}, does not exist; skipping removal";
+        fi
+      else
+        log_warn "staging_dir file at ${CONFIG_PATH}/staging_dir does not exist; skipping removal";
+      fi
+
+      log_debug "cleaning config directory, ${CONFIG_PATH}";
+      rm -rf "${CONFIG_PATH}";
+    else
+      log_warn "used --clean-pre flag when directory ${CONFIG_PATH} does not exist; skipping removal";
+    fi
   fi
 
   if [ ! -d "${CONFIG_PATH}" ]; then
@@ -63,7 +106,6 @@ install() {
     mkdir "${CONFIG_PATH}";
   fi
 
-  local staging_dir
   if [ -f "${CONFIG_PATH}/staging_dir" ]; then
     staging_dir="$(cat $CONFIG_PATH/staging_dir)";
     log_debug "${CONFIG_PATH}/staging_dir file already exists; skipping creation";
@@ -90,6 +132,10 @@ install() {
   log_debug "creating symlinks in ${HOME} to dotfiles in ${MNT_USER_PATH}";
 
   symlink_to_src "${MNT_USER_PATH}" "${HOME}";
+
+  if [[ -n "${clean_post}" ]]; then
+    echo 'clean post flag is active';
+  fi
 }
 
 main() {
