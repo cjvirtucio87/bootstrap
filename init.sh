@@ -25,6 +25,31 @@ log_warn() {
   fi
 }
 
+clean() {
+  local staging_dir
+
+  if [ -d "${CONFIG_PATH}" ]; then
+    if [ -f "${CONFIG_PATH}/staging_dir" ]; then
+      staging_dir="$(cat $CONFIG_PATH/staging_dir)";
+
+      if [ -d "${staging_dir}" ]; then
+        log_debug "cleaning staging_dir, ${staging_dir}";
+
+        rm -rf "${staging_dir}";
+      else
+        log_warn "staging_dir, ${staging_dir}, does not exist; skipping removal";
+      fi
+    else
+      log_warn "staging_dir file at ${CONFIG_PATH}/staging_dir does not exist; skipping removal";
+    fi
+
+    log_debug "cleaning config directory, ${CONFIG_PATH}";
+    rm -rf "${CONFIG_PATH}";
+  else
+    log_warn "used --clean-pre/--clean-post flag when directory ${CONFIG_PATH} does not exist; skipping removal";
+  fi
+}
+
 symlink_to_src() {
   local src_dir=$1;
   local dest_dir=$2;
@@ -73,31 +98,9 @@ install() {
     esac
   done
 
-  local staging_dir
-
   if [ -n "${clean_pre}" ]; then
-    if [ -d "${CONFIG_PATH}" ]; then
-      log_debug "cleaning prior to install";
-
-      if [ -f "${CONFIG_PATH}/staging_dir" ]; then
-        staging_dir="$(cat $CONFIG_PATH/staging_dir)";
-
-        if [ -d "${staging_dir}" ]; then
-          log_debug "cleaning staging_dir, ${staging_dir}";
-
-          rm -rf "${staging_dir}";
-        else
-          log_warn "staging_dir, ${staging_dir}, does not exist; skipping removal";
-        fi
-      else
-        log_warn "staging_dir file at ${CONFIG_PATH}/staging_dir does not exist; skipping removal";
-      fi
-
-      log_debug "cleaning config directory, ${CONFIG_PATH}";
-      rm -rf "${CONFIG_PATH}";
-    else
-      log_warn "used --clean-pre flag when directory ${CONFIG_PATH} does not exist; skipping removal";
-    fi
+    log_debug "cleaning prior to install";
+    clean
   fi
 
   if [ ! -d "${CONFIG_PATH}" ]; then
@@ -105,6 +108,8 @@ install() {
 
     mkdir "${CONFIG_PATH}";
   fi
+
+  local staging_dir
 
   if [ -f "${CONFIG_PATH}/staging_dir" ]; then
     staging_dir="$(cat $CONFIG_PATH/staging_dir)";
@@ -133,8 +138,9 @@ install() {
 
   symlink_to_src "${MNT_USER_PATH}" "${HOME}";
 
-  if [[ -n "${clean_post}" ]]; then
-    echo 'clean post flag is active';
+  if [ -n "${clean_post}" ]; then
+    log_debug "cleaning after install";
+    clean
   fi
 }
 
