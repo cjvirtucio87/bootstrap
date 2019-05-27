@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_PATH="${HOME}/.bootstrap";
+CONFIG_PATH="${HOME}/.stowsh";
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
 DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
@@ -18,16 +18,16 @@ pointing to the files in your $DOTFILES_DEPLOY_DIR.
 
 [usage]
 - View this help message:
-bootstrap install -h
+stowsh install -h
 
-- Clean up the $HOME/.bootstrap folder before executing:
-bootstrap install -c
+- Clean up the $HOME/.stowsh folder before executing:
+stowsh install -c
 
-- Clean up the $HOME/.bootstrap folder after executing:
-bootstrap install -d
+- Clean up the $HOME/.stowsh folder after executing:
+stowsh install -d
 
 - Execute with a log level of DEBUG:
-LOG_LEVEL=debug bootstrap install
+LOG_LEVEL=debug stowsh install
 EOF
 
 clean() {
