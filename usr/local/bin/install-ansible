@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ANSIBLE_REPO="${ANSIBLE_REPO:-ppa:ansible/ansible}";
+CURRENT_DIR=$(dirname $0);
 PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 PYTHON_VER='3.6'
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
@@ -23,23 +24,7 @@ install-ansible -h
 LOG_LEVEL=debug install-ansible 
 EOF
 
-log_debug() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(debug|error)$ ]]; then
-    echo "[DEBUG] ${1}";
-  fi
-}
-
-log_error() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|debug|error)$ ]]; then
-    echo "[ERROR] ${1}";
-  fi
-}
-
-log_warn() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|warn|debug|error)$ ]]; then
-    echo "[WARN] ${1}";
-  fi
-}
+. "${CURRENT_DIR}/.logging";
 
 main() {
   while (( "$#" )); do
