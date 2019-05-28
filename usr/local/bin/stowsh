@@ -7,9 +7,9 @@ LOG_LEVEL="${LOG_LEVEL:-INFO}";
 DOTFILES_DEPLOY_DIR="${DOTFILES_DEPLOY_DIR:-/mnt/c/Users/cjv28}";
 
 read -r -d '' INSTALL_USAGE <<'EOF'
-INSTALL
+stowsh
 [summary]
-Subcommand for installing your dotfiles.
+Command for installing your dotfiles.
 
 [description]
 Install your dotfiles by cloning them from $DOTFILES_URL, copying the files in the $DOTFILES_PLATFORM of 
@@ -18,16 +18,16 @@ pointing to the files in your $DOTFILES_DEPLOY_DIR.
 
 [usage]
 - View this help message:
-stowsh install -h
+stowsh -h
 
 - Clean up the $HOME/.stowsh folder before executing:
-stowsh install -c
+stowsh -c
 
 - Clean up the $HOME/.stowsh folder after executing:
-stowsh install -d
+stowsh -d
 
 - Execute with a log level of DEBUG:
-LOG_LEVEL=debug stowsh install
+LOG_LEVEL=debug stowsh
 EOF
 
 clean() {
@@ -62,7 +62,36 @@ deploy_dotfiles() {
   rsync -av $src_dir/.[^.]* "${dest_dir}";
 }
 
-install() {
+log_debug() {
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(debug|error)$ ]]; then
+    echo "[DEBUG] ${1}";
+  fi
+}
+
+log_error() {
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|debug|error)$ ]]; then
+    echo "[ERROR] ${1}";
+  fi
+}
+
+log_warn() {
+  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|warn|debug|error)$ ]]; then
+    echo "[WARN] ${1}";
+  fi
+}
+
+symlink_to_src() {
+  local src_dir=$1;
+  local dest_dir=$2;
+
+  find $src_dir \
+    -maxdepth 1 \
+    -mindepth 1 \
+    -name '.*' \
+    -exec bash -c "symlink_name=\"${dest_dir}/\$(basename {})\"; if [ ! -L \"\${symlink_name}\" ]; then ln -s {} \"\${symlink_name}\"; fi" \;
+}
+
+main() {
   log_debug "validating required variables";
 
   if [ ! -d "${HOME}" ]; then
@@ -140,51 +169,6 @@ install() {
     log_debug "cleaning after install";
     clean
   fi
-}
-
-log_debug() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(debug|error)$ ]]; then
-    echo "[DEBUG] ${1}";
-  fi
-}
-
-log_error() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|debug|error)$ ]]; then
-    echo "[ERROR] ${1}";
-  fi
-}
-
-log_warn() {
-  if [[ $(echo $LOG_LEVEL | awk '{print tolower($0)}') =~ ^(info|warn|debug|error)$ ]]; then
-    echo "[WARN] ${1}";
-  fi
-}
-
-symlink_to_src() {
-  local src_dir=$1;
-  local dest_dir=$2;
-
-  find $src_dir \
-    -maxdepth 1 \
-    -mindepth 1 \
-    -name '.*' \
-    -exec bash -c "symlink_name=\"${dest_dir}/\$(basename {})\"; if [ ! -L \"\${symlink_name}\" ]; then ln -s {} \"\${symlink_name}\"; fi" \;
-}
-
-main() {
-  local subcommand=$1;
-  shift
-
-  case "${subcommand}" in
-    'install')
-      install "$@";
-      ;;
-    *)
-      echo "unsupported subcommand ${subcommand}";
-      exit 1;
-  esac
-
-  echo "done"; 
 }
 
 main "$@";
