@@ -1,15 +1,26 @@
 # bootstrap
 
-## Overview
+Bootstrap scripts for setting up your local dev environment. Specifically, with these scripts, your machine will have the following:
+
+* dotfiles deployed to a specified folder, with symlinks in your `$HOME` folder pointing to them
+* python and ansible
+
+Simply copy the scripts to your `/usr/local/bin` directory.
+
+# scripts
+
+## stowsh
+
+### Overview
 A linux command for setting up your local development environment. Currently, it clones your dotfiles project, deploys them to your `$DOTFILES_DEPLOY_DIR` (e.g. `/mnt/c/Users/foo`), and creates symbolic links that point to these dotfiles in your `$HOME` folder. Plans for more capabilities are currently in place.
 
 This command is _idempotent_, i.e. you can run this command several times over with the guarantee that the _end state_ will always be the same.
 
-## Caveats
+### Caveats
 
 Currently only supports `Ubuntu 18.04 (Bionic Beaver)`.
 
-## Setup
+### Setup
 
 Install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
@@ -24,10 +35,10 @@ Make sure the required environment variables are setup correctly; specifically:
 
 The script has defaults that could possibly serve as examples. They're currently setup to run on my machine (`Ubuntu 18.04` on `WSL`).
 
-## Usage
+### Usage
 See the help message for more information:
 
 ```
-./bootstrap install -h
+stowsh -h
 ```
 
