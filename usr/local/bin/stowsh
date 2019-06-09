@@ -2,7 +2,7 @@
 
 CONFIG_PATH="${HOME}/.stowsh";
 CURRENT_DIR=$(dirname $0);
-DOTFILES_URL="${DOTFILES_URL:-git@github.com:cjvirtucio87/dotfiles.git}";
+DOTFILES_URL="${DOTFILES_URL:-git@github.com:your_usr_name/dotfiles.git}";
 DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
 DOTFILES_DEPLOY_DIR="${DOTFILES_DEPLOY_DIR:-/mnt/c/Users/cjv28}";
