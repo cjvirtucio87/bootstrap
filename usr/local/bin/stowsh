@@ -28,8 +28,9 @@ LOG_LEVEL=debug stowsh
 EOF
 
 . "${CURRENT_DIR}/.logging";
-. "${CURRENT_DIR}/.stowsh-install";
 . "${CURRENT_DIR}/.stowsh-git";
+. "${CURRENT_DIR}/.stowsh-install";
+. "${CURRENT_DIR}/.stowsh-update";
 
 main() {
   log_debug "validating required variables";
@@ -48,11 +49,14 @@ main() {
   shift;
 
   case "${subcommand}" in
+    'git')
+      call_git "$@";
+      ;;
     'install')
       install "$@";
       ;;
-    'git')
-      call_git "$@";
+    'update')
+      update "$@";
       ;;
     '-h' | '--help')
       echo "${STOWSH_USAGE}";
