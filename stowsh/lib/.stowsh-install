@@ -1,16 +1,7 @@
-#!/bin/bash
-
-CONFIG_PATH="${HOME}/.stowsh";
-CURRENT_DIR=$(dirname $0);
-DOTFILES_URL="${DOTFILES_URL:-git@github.com:your_usr_name/dotfiles.git}";
-DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
-LOG_LEVEL="${LOG_LEVEL:-INFO}";
-DOTFILES_DEPLOY_DIR="${DOTFILES_DEPLOY_DIR:-/mnt/c/Users/cjv28}";
-
 read -r -d '' INSTALL_USAGE <<'EOF'
-stowsh
+stowsh install
 [summary]
-Command for installing your dotfiles.
+stowsh subcommand for installing your dotfiles.
 
 [description]
 Install your dotfiles by cloning them from $DOTFILES_URL, copying the files in the $DOTFILES_PLATFORM of 
@@ -19,76 +10,21 @@ pointing to the files in your $DOTFILES_DEPLOY_DIR.
 
 [usage]
 - View this help message:
-stowsh -h
+stowsh install -h
 
 - Clean up the $HOME/.stowsh folder before executing:
-stowsh -c
+stowsh install -c
 
 - Clean up the $HOME/.stowsh folder after executing:
-stowsh -d
+stowsh install -d
 
 - Execute with a log level of DEBUG:
-LOG_LEVEL=debug stowsh
+LOG_LEVEL=debug stowsh install
 EOF
 
-. "${CURRENT_DIR}/.logging";
+. "${PROJECT_DIR}/stowsh/lib/.stowsh-lib";
 
-clean() {
-  local staging_dir
-
-  if [ -d "${CONFIG_PATH}" ]; then
-    if [ -f "${CONFIG_PATH}/staging_dir" ]; then
-      staging_dir="$(cat $CONFIG_PATH/staging_dir)";
-
-      if [ -d "${staging_dir}" ]; then
-        log_debug "cleaning staging_dir, ${staging_dir}";
-
-        rm -rf "${staging_dir}";
-      else
-        log_warn "staging_dir, ${staging_dir}, does not exist; skipping removal";
-      fi
-    else
-      log_warn "staging_dir file at ${CONFIG_PATH}/staging_dir does not exist; skipping removal";
-    fi
-
-    log_debug "cleaning config directory, ${CONFIG_PATH}";
-    rm -rf "${CONFIG_PATH}";
-  else
-    log_warn "used --clean-pre/--clean-post flag when directory ${CONFIG_PATH} does not exist; skipping removal";
-  fi
-}
-
-deploy_dotfiles() {
-  local src_dir=$1;
-  local dest_dir=$2;  
-
-  rsync -av $src_dir/.[^.]* "${dest_dir}";
-}
-
-symlink_to_src() {
-  local src_dir=$1;
-  local dest_dir=$2;
-
-  find $src_dir \
-    -maxdepth 1 \
-    -mindepth 1 \
-    -name '.*' \
-    -exec bash -c "symlink_name=\"${dest_dir}/\$(basename {})\"; if [ ! -L \"\${symlink_name}\" ]; then ln -s {} \"\${symlink_name}\"; fi" \;
-}
-
-main() {
-  log_debug "validating required variables";
-
-  if [ ! -d "${HOME}" ]; then
-    log-error "HOME, ${HOME}, does not exist";
-    exit 1;
-  fi
-
-  if [ ! -d "${DOTFILES_DEPLOY_DIR}" ]; then
-    log_error "DOTFILES_DEPLOY_DIR, ${DOTFILES_DEPLOY_DIR}, does not exist";
-    exit 1;
-  fi
-
+install() {
   local clean_post
   local clean_pre
 
@@ -155,5 +91,3 @@ main() {
     clean
   fi
 }
-
-main "$@";
