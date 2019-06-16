@@ -5,5 +5,5 @@ Bootstrap scripts for setting up your local dev environment. Specifically, with 
 * dotfiles deployed to a specified folder, with symlinks in your `$HOME` folder pointing to them
 * python and ansible
 
-Simply copy the folder of the scripts you want; in Ubuntu, it'd usually be something like `/opt/cjvirtucio87-bootstrap/`, e.g. `/opt/cjvirtucio87-bootstrap/stowsh/bin`. Then add the `bin` folder to your path: `PATH=/opt/cjvirtucio87-bootstrap/stowsh/bin:${PATH}`.
+Just move the folder for the command you want to your desired install directory, e.g. `mv /path/to/cloned/bootstrap/stowsh /opt/cjvirtucio87-bootstrap/stowsh`. Then, add the `bin` directory to your path: `PATH=/opt/cjvirtucio87-bootstrap/stowsh/bin:$PATH`. You'll also need to copy the project-wide `lib` folder: `mv /path/to/cloned/bootstrap/lib /opt/cjvirtucio87-bootstrap/lib`.
 
