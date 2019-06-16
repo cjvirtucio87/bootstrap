@@ -16,7 +16,7 @@ stowsh update -h
 LOG_LEVEL=debug stowsh update
 EOF
 
-. "${CURRENT_DIR}/.stowsh-lib";
+. "${PROJECT_DIR}/stowsh/.stowsh-lib";
 
 update() {
   while (( "$#" )); do

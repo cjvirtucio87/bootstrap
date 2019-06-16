@@ -22,7 +22,7 @@ stowsh install -d
 LOG_LEVEL=debug stowsh install
 EOF
 
-. "${CURRENT_DIR}/.stowsh-lib";
+. "${PROJECT_DIR}/stowsh/.stowsh-lib";
 
 install() {
   local clean_post

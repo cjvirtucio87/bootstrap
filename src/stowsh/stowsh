@@ -1,9 +1,9 @@
 #!/bin/bash
 
 CONFIG_PATH="${HOME}/.stowsh";
-CURRENT_DIR=$(dirname $0);
 DOTFILES_URL="${DOTFILES_URL:-git@github.com:your_usr_name/dotfiles.git}";
 DOTFILES_PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
+PROJECT_DIR="$(dirname $0)/..";
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
 DOTFILES_DEPLOY_DIR="${DOTFILES_DEPLOY_DIR:-/mnt/c/Users/cjv28}";
 
@@ -27,10 +27,10 @@ stowsh -h
 LOG_LEVEL=debug stowsh
 EOF
 
-. "${CURRENT_DIR}/.logging";
-. "${CURRENT_DIR}/.stowsh-git";
-. "${CURRENT_DIR}/.stowsh-install";
-. "${CURRENT_DIR}/.stowsh-update";
+. "${PROJECT_DIR}/.logging";
+. "${PROJECT_DIR}/stowsh/.stowsh-git";
+. "${PROJECT_DIR}/stowsh/.stowsh-install";
+. "${PROJECT_DIR}/stowsh/.stowsh-update";
 
 main() {
   log_debug "validating required variables";

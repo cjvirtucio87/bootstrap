@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ANSIBLE_REPO="${ANSIBLE_REPO:-ppa:ansible/ansible}";
-CURRENT_DIR=$(dirname $0);
+PROJECT_DIR="$(dirname $0)/..";
 PLATFORM="${DOTFILES_PLATFORM:-ubuntu}";
 PYTHON_VER='3.6'
 LOG_LEVEL="${LOG_LEVEL:-INFO}";
@@ -24,7 +24,7 @@ install-ansible -h
 LOG_LEVEL=debug install-ansible 
 EOF
 
-. "${CURRENT_DIR}/.logging";
+. "${PROJECT_DIR}/.logging";
 
 main() {
   while (( "$#" )); do
