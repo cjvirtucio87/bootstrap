@@ -18,6 +18,7 @@ This is a command-line tool for managing dotfiles.
 Available subcommands:
 - install (install your dotfiles)
 - git (pass-thru to git on your cloned dotfiles)
+- update (copy your dotfiles back to your cloned dotfiles location)
 
 [usage]
 - View this help message:
