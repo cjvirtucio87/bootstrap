@@ -5,7 +5,8 @@ stowsh subcommand for updating your dotfiles.
 
 [description]
 Update your dotfiles by copying them back from the $DOTFILES_DEPLOY_DIR to the $DOTFILES_PLATFORM of 
-your git repo.
+your git repo. Note that your dotfiles must already have been cloned using the stowsh install
+subcommand into a staging directory, and that this staging directory was not removed.
 
 [usage]
 - View this help message:

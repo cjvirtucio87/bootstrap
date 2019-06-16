@@ -12,9 +12,11 @@ Simply copy the scripts to your `/usr/local/bin` directory.
 ## stowsh
 
 ### Overview
-A linux command for setting up your local development environment. Currently, it clones your dotfiles project, deploys them to your `$DOTFILES_DEPLOY_DIR` (e.g. `/mnt/c/Users/foo`), and creates symbolic links that point to these dotfiles in your `$HOME` folder. Plans for more capabilities are currently in place.
+A linux command for setting up your local development environment. It clones your dotfiles project, deploys them to your `$DOTFILES_DEPLOY_DIR` (e.g. `/mnt/c/Users/foo`), and creates symbolic links that point to these dotfiles in your `$HOME` folder.
 
-This command is _idempotent_, i.e. you can run this command several times over with the guarantee that the _end state_ will always be the same.
+You can also update your dotfiles project by running `stowsh update`, copying your dotfiles back into the cloned dotfiles repo.
+
+There is also a pass-thru to the `git` command to manage your dotfiles repo, e.g. `stowsh git status` to view the status of your dotfiles repo.
 
 ### Caveats
 
